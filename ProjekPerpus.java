@@ -129,7 +129,7 @@ public class ProjekPerpus {
         }
 
         System.out.println("===============================================");
-        System.out.println("        ID | Judul | Kategori | Stok");
+        System.out.println("ID | Judul | Kategori | Stok");
         System.out.println("===============================================");
 
         for (int i = 0; i < jumlahData; i++) {
