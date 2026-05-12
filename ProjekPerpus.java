@@ -135,9 +135,9 @@ public class ProjekPerpus {
         for (int i = 0; i < jumlahData; i++) {
             if (dataBuku[i].aktif == true) {
                 System.out.println(
-                    dataBuku[i].id + "       | " +
-                    dataBuku[i].judul + "    | " +
-                    dataBuku[i].kategori + " | " +
+                    dataBuku[i].id + "|" +
+                    dataBuku[i].judul + "|" +
+                    dataBuku[i].kategori + "|" +
                     dataBuku[i].stok
                 );
             }
