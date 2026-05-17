@@ -248,6 +248,7 @@ class Buku {
         if (ditemukan == false) {
             System.out.println("Buku tidak ditemukan.");
         }
+        //revisi
     }
 
    static void cariBukubin() {  
@@ -311,6 +312,7 @@ class Buku {
                     ditemukan = true;
                 }
             }
+            //revisi
 
         if (ditemukan == false) {
             System.out.println("Kategori buku tidak ditemukan");
@@ -459,10 +461,10 @@ class Buku {
                 if (dataBuku[i].status.equalsIgnoreCase("Tersedia")) {
                     totalTersedia++;
                 }
-
                 if (dataBuku[i].status.equalsIgnoreCase("Dipinjam")) {
                     totalDipinjam++;
                 }
+                //revisi
             }
         }
 
