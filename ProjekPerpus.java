@@ -34,8 +34,8 @@ class Buku {
                 System.out.println("2. Tampilkan Semua Buku");
                 System.out.println("3. Edit Data Buku Berdasarkan ID");
                 System.out.println("4. Hapus Data Buku Berdasarkan ID");
-                System.out.println("5. Cari buku berdasarkan nama");
-                System.out.println("6. Cari buku berdasarkan ID");
+                System.out.println("5. Cari buku berdasarkan nama (Linear Search)");
+                System.out.println("6. Cari buku berdasarkan ID (Binary Search");
                 System.out.println("7. Cari buku berdasarkan kategori");
                 System.out.println("8. Urutkan buku berdasarkan ID");
                 System.out.println("9. urutkan buku berdasarkan judul (Alphabetical)");
@@ -240,36 +240,69 @@ class Buku {
         System.out.println("Data tidak ditemukan.");
     }
 
-    static void cariBukuLin() {
- 
-        System.out.println("\n=== MENCARI BUKU ===");
+   static void cariBukuLin() {
 
-        System.out.println("Masukan nama buku: ");
-        String cari = input.nextLine();
+    System.out.println("\n=== MENCARI BUKU ===");
+    System.out.println("Masukan nama buku: ");
+    String cari = input.nextLine();
 
-        boolean ditemukan = false;
+    boolean ditemukan = false;
 
+    for (int i = 0; i < jumlahData; i++) {
+        if (dataBuku[i].aktif == true && mengandung(dataBuku[i].judul, cari)) {
 
-        for (int i = 0; i < jumlahData; i++) {
-            if (dataBuku[i].aktif == true &&
-                dataBuku[i].judul.toLowerCase().contains(cari.toLowerCase())) {
+            System.out.println("\nBuku ditemukan:");
+            System.out.println("--------------------------------");
+            System.out.println("ID       : " + dataBuku[i].id);
+            System.out.println("Judul    : " + dataBuku[i].judul);
+            System.out.println("Kategori : " + dataBuku[i].kategori);
+            System.out.println("Stok     : " + dataBuku[i].stok);
 
-                    System.out.println("\nBuku ditemukan:");
-                    System.out.println("--------------------------------");
-                    System.out.println("ID       : " + dataBuku[i].id);
-                    System.out.println("Judul    : " + dataBuku[i].judul);
-                    System.out.println("Kategori : " + dataBuku[i].kategori);
-                    System.out.println("Stok     : " + dataBuku[i].stok);
-
-                    ditemukan = true;
-                }
+            ditemukan = true;
         }
-        if (ditemukan == false) {
-            System.out.println("Buku tidak ditemukan.");
-        }
-        //revisi
     }
 
+    if (ditemukan == false) {
+        System.out.println("Buku tidak ditemukan.");
+    }
+}
+
+static boolean mengandung(String teks, String cari) {
+   
+    char[] arrTeks = new char[teks.length()];
+    char[] arrCari = new char[cari.length()];
+
+    for (int i = 0; i < teks.length(); i++) {
+        char c = teks.charAt(i);
+        if (c >= 'A' && c <= 'Z') {
+            arrTeks[i] = (char)(c + 32); 
+        } else {
+            arrTeks[i] = c;
+        }
+    }
+
+    for (int i = 0; i < cari.length(); i++) {
+        char c = cari.charAt(i);
+        if (c >= 'A' && c <= 'Z') {
+            arrCari[i] = (char)(c + 32);
+        } else {
+            arrCari[i] = c;
+        }
+    }
+
+    for (int i = 0; i <= arrTeks.length - arrCari.length; i++) {
+        boolean cocok = true;
+        for (int j = 0; j < arrCari.length; j++) {
+            if (arrTeks[i + j] != arrCari[j]) {
+                cocok = false;
+                break;
+            }
+        }
+        if (cocok) return true;
+    }
+
+    return false;
+}
    static void cariBukubin() {  
         System.out.println("\n=== CARI ID BUKU (BINARY SEARCH) ===");
 
