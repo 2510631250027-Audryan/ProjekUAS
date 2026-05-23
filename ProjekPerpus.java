@@ -143,7 +143,7 @@ class Buku {
             dataBuku[jumlahData++] = new Buku(27, "Akuntansi Dasar", "Ekonomi", 10);
             dataBuku[jumlahData++] = new Buku(28, "Ekonomi Mikro", "Ekonomi", 8);
             dataBuku[jumlahData++] = new Buku(29, "Ekonomi Makro", "Ekonomi", 7);
-            dataBuku[jumlahData++] = new Buku(30, "Kewirausahaan", "Ekonomi", 13);
+            dataBuku[jumlahData++] = new Buku(30, "Kewirausahaan", "Ekonomi", 12);
         }
 
         static void tambahBuku() {
@@ -341,35 +341,43 @@ static boolean mengandung(String teks, String cari) {
     }
 
     static void cariKategori() {
-
         System.out.println("\n=== CARI BUKU BERDASARKAN KATEGORI ===");
 
         System.out.print("Masukan kategori buku: ");
         String kategori = input.nextLine();
-
         boolean ditemukan = false;
 
-        for (int i = 0; i < jumlahData; i++) {
+    for (int i = 0; i < jumlahData; i++) {
 
-            if (dataBuku[i].aktif == true &&
-                dataBuku[i].kategori.equalsIgnoreCase(kategori)) {
-
-                    System.out.println("\nBuku ditemukan");
-                    System.out.println("----------------------------");
-                    System.out.println("ID       : " + dataBuku[i].id);
-                    System.out.println("Judul    : " + dataBuku[i].judul);
-                    System.out.println("Kategori : " + dataBuku[i].kategori);
-                    System.out.println("Stok     : " + dataBuku[i].stok);
-
-                    ditemukan = true;
-                }
+        if (dataBuku[i].aktif == true &&
+            kategoriSama(dataBuku[i].kategori, kategori)) {
+                System.out.println("\nBuku ditemukan");
+                System.out.println("----------------------------");
+                System.out.println("ID       : " + dataBuku[i].id);
+                System.out.println("Judul    : " + dataBuku[i].judul);
+                System.out.println("Kategori : " + dataBuku[i].kategori);
+                System.out.println("Stok     : " + dataBuku[i].stok);
+                ditemukan = true;
             }
-            //revisi
-
-        if (ditemukan == false) {
-            System.out.println("Kategori buku tidak ditemukan");
         }
+
+    if (ditemukan == false) {
+        System.out.println("Kategori buku tidak ditemukan");
     }
+}
+
+    static boolean kategoriSama(String a, String b) {
+        if (a.length() != b.length()) return false;
+        for (int i = 0; i < a.length(); i++) {
+            char ca = a.charAt(i);
+            char cb = b.charAt(i);
+        if (ca >= 'A' && ca <= 'Z') ca = (char)(ca + 32);
+        if (cb >= 'A' && cb <= 'Z') cb = (char)(cb + 32);
+        if (ca != cb) return false;
+    }
+
+    return true;
+}
     
     static void bubbleSortid() {
         System.out.println("\n=== SORTING BUKU (ID) ===");
@@ -496,59 +504,46 @@ static boolean mengandung(String teks, String cari) {
     
     static void updateStatus() {
 
-        System.out.println("\n=== UPDATE STATUS BUKU ===");
+    System.out.println("\n=== UPDATE STATUS BUKU ===");
 
-        System.out.print("Masukkan ID Buku: ");
-        int id = input.nextInt();
-        input.nextLine();
+    System.out.print("Masukkan ID Buku: ");
+    int id = input.nextInt();
+    input.nextLine();
 
-        for (int i = 0; i < jumlahData; i++) {
+    for (int i = 0; i < jumlahData; i++) {
 
-            if (dataBuku[i].id == id && dataBuku[i].aktif == true) {
+        if (dataBuku[i].id == id && dataBuku[i].aktif == true) {
 
-                System.out.println("Status saat ini : " + dataBuku[i].status);
+            System.out.println("Status saat ini : " + dataBuku[i].status);
 
-                System.out.print("Masukkan status buku baru (Tersedia/Dipinjam): ");
-                dataBuku[i].status = input.nextLine();
+            System.out.print("Masukkan status buku baru (Tersedia/Dipinjam): ");
+            dataBuku[i].status = input.nextLine();
 
-                System.out.println("Status berhasil diupdate.");
-                return;
-            }
-        }
-
-        System.out.println("Buku tidak ditemukan.");
-    }
-         static void counterBuku() {
-
-        int totalAktif = 0;
-        int totalTersedia = 0;
-        int totalDipinjam = 0;
-
-        for (int i = 0; i < jumlahData; i++) {
-
-            if (dataBuku[i].aktif == true) {
-
-                totalAktif++;
-
-                if (dataBuku[i].status.equalsIgnoreCase("Tersedia")) {
-                    totalTersedia++;
+        if (statusSama(dataBuku[i].status, "Dipinjam")) {
+                if (dataBuku[i].stok > 0) {
+                    dataBuku[i].stok--;
+                    System.out.println("Stok berkurang, sisa stok: " + dataBuku[i].stok);
+                } else {
+                    System.out.println("Stok habis, tidak bisa dipinjam.");
+                    dataBuku[i].status = "Tersedia";
                 }
-                if (dataBuku[i].status.equalsIgnoreCase("Dipinjam")) {
-                    totalDipinjam++;
-                }
-                //revisian
+            } else if (statusSama(dataBuku[i].status, "Tersedia")) {
+                dataBuku[i].stok++;
+                System.out.println("Buku dikembalikan, stok bertambah: " + dataBuku[i].stok);
             }
-        }
 
-        System.out.println("\n=== COUNTER BUKU ===");
-        System.out.println("Total Buku Aktif     : " + totalAktif);
-        System.out.println("Total Buku Tersedia  : " + totalTersedia);
-        System.out.println("Total Buku yang Dipinjam  : " + totalDipinjam);
+            System.out.println("Status berhasil diupdate.");
+            return;
+        }
     }
-    static void statistikData() {
+
+    System.out.println("Buku tidak ditemukan.");
+}
+
+    static void counterBuku() {
 
     int totalAktif = 0;
-    int totalTersedia = 0;
+    int totalStok = 0;
     int totalDipinjam = 0;
 
     for (int i = 0; i < jumlahData; i++) {
@@ -556,12 +551,34 @@ static boolean mengandung(String teks, String cari) {
         if (dataBuku[i].aktif == true) {
 
             totalAktif++;
+            totalStok += dataBuku[i].stok;
 
-            if (dataBuku[i].status.equalsIgnoreCase("Tersedia")) {
-                totalTersedia++;
+            if (statusSama(dataBuku[i].status, "Dipinjam")) {
+                totalDipinjam++;
             }
+        }
+    }
 
-            if (dataBuku[i].status.equalsIgnoreCase("Dipinjam")) {
+    System.out.println("\n=== COUNTER BUKU ===");
+    System.out.println("Total Buku Aktif     : " + totalAktif);
+    System.out.println("Total Stok Tersedia  : " + totalStok);
+    System.out.println("Total Buku Dipinjam  : " + totalDipinjam);
+}
+
+    static void statistikData() {
+
+    int totalAktif = 0;
+    int totalStok = 0;
+    int totalDipinjam = 0;
+
+    for (int i = 0; i < jumlahData; i++) {
+
+        if (dataBuku[i].aktif == true) {
+
+            totalAktif++;
+            totalStok += dataBuku[i].stok;
+
+            if (statusSama(dataBuku[i].status, "Dipinjam")) {
                 totalDipinjam++;
             }
         }
@@ -570,22 +587,38 @@ static boolean mengandung(String teks, String cari) {
     double persenTersedia = 0;
     double persenDipinjam = 0;
 
-    if (totalAktif > 0) {
-        persenTersedia = (double) totalTersedia / totalAktif * 100;
-        persenDipinjam = (double) totalDipinjam / totalAktif * 100;
+    if (totalStok > 0) {
+        persenTersedia = (double) totalStok / (totalStok + totalDipinjam) * 100;
+        persenDipinjam = (double) totalDipinjam / (totalStok + totalDipinjam) * 100;
     }
 
     System.out.println("\n=== STATISTIK DATA BUKU ===");
     System.out.println("Total Buku Aktif      : " + totalAktif);
-    System.out.println("Total Buku Tersedia   : " + totalTersedia);
+    System.out.println("Total Stok Tersedia   : " + totalStok);
     System.out.println("Total Buku Dipinjam   : " + totalDipinjam);
 
     System.out.printf("Persentase Tersedia   : %.2f%%\n", persenTersedia);
     System.out.printf("Persentase Dipinjam   : %.2f%%\n", persenDipinjam);
-    }
- static void saveData() {
+}
 
-    try {
+     static boolean statusSama(String a, String b) { //statusSama untuk counterBuku dan statistik Data
+
+        if (a.length() != b.length()) return false;
+
+        for (int i = 0; i < a.length(); i++) {
+            char ca = a.charAt(i);
+            char cb = b.charAt(i);
+        if (ca >= 'A' && ca <= 'Z') ca = (char)(ca + 32);
+        if (cb >= 'A' && cb <= 'Z') cb = (char)(cb + 32);
+        if (ca != cb) return false;
+    }
+
+    return true;
+}
+ 
+    static void saveData() {
+
+     try {
 
         FileWriter fw = new FileWriter("dataBuku.txt");
 
